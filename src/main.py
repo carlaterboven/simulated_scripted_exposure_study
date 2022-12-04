@@ -1,37 +1,27 @@
 # coding=utf-8
-#import pandas as pd
 import time
-#from multiprocessing import Process
-import os
+#import os
 import simulation
 import sonification
 
-def try_sensor_read(sensor):
-    try:
-        sensor.read_data()
-    except KeyboardInterrupt:
-        raise
-    except:
-        sensor.set_nan_data()
-
-
-
-
 if __name__ ==  '__main__':
     print('Read and collect data. [Press Ctrl+C to exit!]')
+    sampling_time = 2 # measure every 2 seconds
 
     simulator = simulation.Simulation()
-    sonify = sonification.SonificationLogic()
+    sonify = sonification.SonificationLogic(sampling_time)
 
     try:
         while True:
-            # TODO hier oder in sonification file die zeiten anpassen
-            #time.sleep(1) # measure every 2 seconds
+            time.sleep(sampling_time - 0.6)
 
+            position = simulator.get_gps()
             # TODO für PM2.5 anpassen
-            pm2_5 = simulator.get_value('median_PM10')
-            pm10 = simulator.get_value('median_PM10')
+            pm2_5 = simulator.get_value('median_PM10', position)
+            pm10 = simulator.get_value('median_PM10', position)
             sonify.play_sound(pm2_5, pm10)
+
+            print(position, pm2_5, pm10)
 
 
     except KeyboardInterrupt:

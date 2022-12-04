@@ -14,8 +14,8 @@ class Simulation:
     def __del__(self):
         pass
 
-    def get_value(self, feature):
-        position = self.get_gps()
+    def get_value(self, feature, position):
+        #position = self.get_gps()
         index = self.get_index(position[0], position[1])
         value = self.get_value_from_df(feature, index)
         if math.isnan(value):

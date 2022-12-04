@@ -3,19 +3,19 @@ from pythonosc.udp_client import SimpleUDPClient
 from multiprocessing import Process
 
 class SonificationLogic:
-    def __init__(self):
-        self.__oscmessenger = OSCMessenger()
+    def __init__(self, sampling_time):
+        self.__oscmessenger = OSCMessenger(sampling_time)
 
     def __del__(self):
         pass
 
     def play_sound(self, pm2_5, pm10):
         p1 = Process(target=self.__oscmessenger.geiger_counter, args=[pm2_5])
-        #p2 = Process(target=OSCMessenger.beep, args=[pm10])
+        p2 = Process(target=self.__oscmessenger.beep, args=[pm10])
         p1.start()
-        #p2.start()
+        p2.start()
         p1.join()
-        #p2.join()
+        p2.join()
 
 class OSCMessenger:
     client = SimpleUDPClient("127.0.0.1", 6666)
@@ -24,7 +24,9 @@ class OSCMessenger:
     pm10_EU_threshold = 40
     pm10_WHO_threshold = 20
 
-    def __init__(self):
+    def __init__(self, sampling_time):
+        # time in seconds until next sound interval
+        self.__sampling_time = sampling_time
         self.start_sound()
 
     def __del__(self):
@@ -35,10 +37,12 @@ class OSCMessenger:
         pass
 
     def beep(self, pm10):
-        # set the time in seconds while there is same sound
-        sampling_time = 2
-        OSCMessenger.client.send_message("/beep", [int(pm10)*2])
-        time.sleep(1)
+        #OSCMessenger.client.send_message("/beep", [int(pm10)*2])
+        num_samples_schrillkurz = 24476
+        duration_schrillkurz = 555
+        duration = min(duration_schrillkurz * pm10, self.__sampling_time * 1000)
+        # send [sampling time in ms, time for one sample (metronome), start in sample, end in sample, duration]
+        OSCMessenger.client.send_message("/beep", [self.__sampling_time * 1000, duration, 0, num_samples_schrillkurz, duration])
 
 
     def mystic(self, pm10):
@@ -64,20 +68,14 @@ class OSCMessenger:
             #time.sleep(time_left/1000)
 
 
-    def geiger_counter(self, pm10):
-        # amount of geiger counts is based on pm 10 (between 0 and 25, all outliers rounded to 25)
-        pm10 = round(pm10)
-        if pm10 > 25:
-            pm10 = 25
-        # set time in seconds while geiger clicks
-        sampling_time = 2
-        # click once for every 2µg disjoint PM10 pollution
-        num_clicks = pm10//2
+    def geiger_counter(self, pm2_5):
+        pm2_5 = round(pm2_5)
+        # click once for every 2µg disjoint PM2.5 pollution
+        num_clicks = pm2_5//2
         if num_clicks == 0:
-            time.sleep(sampling_time - 0.5)
+            return
         else:
-            OSCMessenger.client.send_message("/geiger", [sampling_time * 1000, (sampling_time * 1000) / num_clicks, 0, 1585, 33])
-            time.sleep(sampling_time - 0.7)
+            OSCMessenger.client.send_message("/geiger", [self.__sampling_time * 1000, (self.__sampling_time * 1000) / num_clicks, 0, 1585, 33])
 
 
     def asthma_inhaler(self, pm10s, joint_pm10):
