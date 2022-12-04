@@ -17,7 +17,7 @@ if __name__ ==  '__main__':
 
             position = simulator.get_gps()
             # TODO für PM2.5 anpassen
-            pm2_5 = simulator.get_value('median_PM10', position)
+            pm2_5 = simulator.get_value('median_PM2.5', position)
             pm10 = simulator.get_value('median_PM10', position)
             sonify.play_sound(pm2_5, pm10)
 

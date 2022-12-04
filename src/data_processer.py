@@ -20,8 +20,10 @@ class DataProcesser:
         self.treat_outliers()
         self.calibrate_data()
         self.calculate_grid_index()
+        pm2_5_grid = self.get_median_squares_filtered('median_PM2.5')
         pm10_grid = self.get_median_squares_filtered('median_PM10')
-        return pm10_grid
+        complete_grid = pd.concat([pm2_5_grid, pm10_grid], axis=1)
+        return complete_grid
 
     def import_data(self):
         for filename in self.__data_files:

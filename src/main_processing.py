@@ -9,6 +9,6 @@ atmotube_data_files = ['atmotube_oct11.csv',
                        'atmotube_nov10.csv', 'atmotube_nov11.csv', 'atmotube_nov18.csv']
 
 dataimport = data_processer.DataProcesser(raw_data_files, atmotube_data_files)
-pm10_grid = dataimport.run_complete_processing()
-print(pm10_grid)
-dataimport.export_grid_csv(pm10_grid)
+data_grid = dataimport.run_complete_processing()
+print(data_grid)
+dataimport.export_grid_csv(data_grid)
