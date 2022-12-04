@@ -1,5 +1,6 @@
 #from gps3 import agps3
 #import RPi.GPIO as GPIO
+from random import uniform
 
 class Gps:
     def __init__(self):
@@ -32,7 +33,7 @@ class Gps:
         # self.compute_position()
         # return [self.get_lat(), self.get_lon()]
         #return [52.393768, 13.041159]
-        return [52.393768, 23.041159]
+        return [uniform(52.393, 52.394), uniform(13.0409, 13.0413)] # random gps generation for testing
 
     def show_feedback(self):
         # use green LED to show successfull GPS
