@@ -8,7 +8,7 @@ class Simulation:
         self.__step = 0.0001   # size of grid fields for underlying pm data
         self.__last_valid_index = [52.3894,13.0393]
         self.__gps_sensor = gps.Gps()
-        self.__data_path = '../simulation_data/simulation_data.csv'
+        self.__data_path = '/home/pi/Dokumente/simulated_scripted_exposure_study/simulation_data/simulation_data.csv'
         self.__data = self.get_dataframe()
 
     def __del__(self):
