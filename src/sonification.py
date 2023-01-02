@@ -11,7 +11,7 @@ class SonificationLogic:
 
     def play_sound(self, pm2_5, pm10):
         p1 = Process(target=self.__oscmessenger.geiger_counter, args=[pm2_5])
-        p2 = Process(target=self.__oscmessenger.beep, args=[pm10])
+        p2 = Process(target=self.__oscmessenger.string_sound, args=[pm10])
         p1.start()
         p2.start()
         p1.join()
@@ -36,13 +36,28 @@ class OSCMessenger:
         # TODO add introduction to sonification concepts
         pass
 
+    def midi(self, pm10):
+        OSCMessenger.client.send_message("/midi", [40 + int(pm10)*2])
+
     def beep(self, pm10):
         #OSCMessenger.client.send_message("/beep", [int(pm10)*2])
         num_samples_schrillkurz = 24476
         duration_schrillkurz = 555
-        duration = min(duration_schrillkurz * pm10, self.__sampling_time * 1000)
+        duration = min(duration_schrillkurz * pm10 , self.__sampling_time * 1000)
+        print(duration)
         # send [sampling time in ms, time for one sample (metronome), start in sample, end in sample, duration]
         OSCMessenger.client.send_message("/beep", [self.__sampling_time * 1000, duration, 0, num_samples_schrillkurz, duration])
+
+
+    def string_sound(self, pm10):
+        num_samples_sound5 = 436992
+        num_samples = num_samples_sound5 * (2000 / 4552)
+        duration_sound5 = 4552
+        num_samples_sound6 = 284770
+        duration_sound6 = 2966
+        duration = duration_sound5 * (2000 / 4552) / pm10
+        print(duration)
+        OSCMessenger.client.send_message("/string_sound", [self.__sampling_time * 1000, duration, 0, num_samples, duration])
 
 
     def mystic(self, pm10):
