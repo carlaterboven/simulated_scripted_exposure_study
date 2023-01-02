@@ -21,7 +21,7 @@ if __name__ ==  '__main__':
             pm10 = simulator.get_value('median_PM10', position)
             sonify.play_sound(pm2_5, pm10)
 
-            #print(position, pm2_5, pm10)
+            print(position, pm2_5, pm10)
 
 
     except KeyboardInterrupt:

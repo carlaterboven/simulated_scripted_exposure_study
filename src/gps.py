@@ -1,5 +1,5 @@
-#from gps3 import agps3
-#import RPi.GPIO as GPIO
+from gps3 import agps3
+import RPi.GPIO as GPIO
 from random import uniform
 
 class Gps:
@@ -8,29 +8,32 @@ class Gps:
         self.__lon = 0
         self.__alt = 0
         self.__time = 0
-        #self.__gps_socket = agps3.GPSDSocket()
-        #self.__data_stream = agps3.DataStream()
+        self.__gps_socket = agps3.GPSDSocket()
+        self.__data_stream = agps3.DataStream()
 
-        #self.__gps_socket.connect()
-        #self.__gps_socket.watch()
+        self.__gps_socket.connect()
+        self.__gps_socket.watch()
 
-        #GPIO.setmode(GPIO.BCM)
-        #self.__RED_LED = 20
-        #GPIO.setup(self.__RED_LED, GPIO.OUT)
-        #GPIO.output(self.__RED_LED, GPIO.LOW)
-        #self.__GREEN_LED = 21
-        #GPIO.setup(self.__GREEN_LED, GPIO.OUT)
-        #GPIO.output(self.__GREEN_LED, GPIO.LOW)
+        GPIO.setmode(GPIO.BCM)
+        self.__RED_LED = 27
+        GPIO.setup(self.__RED_LED, GPIO.OUT)
+        GPIO.output(self.__RED_LED, GPIO.LOW)
+        self.__GREEN_LED = 17
+        GPIO.setup(self.__GREEN_LED, GPIO.OUT)
+        GPIO.output(self.__GREEN_LED, GPIO.LOW)
+        
+        self.green_led()
 
     def __del__(self):
-        #GPIO.output(self.__GREEN_LED, GPIO.LOW)
-        #GPIO.output(self.__RED_LED, GPIO.LOW)
-        #GPIO.cleanup()
+        GPIO.output(self.__GREEN_LED, GPIO.LOW)
+        GPIO.output(self.__RED_LED, GPIO.LOW)
+        GPIO.cleanup()
         pass
 
     # TODO replace this when GPS sensor is available again
     def get_position(self):
-        # self.compute_position()
+        self.compute_position()
+        print([self.get_lat(), self.get_lon()])
         # return [self.get_lat(), self.get_lon()]
         #return [52.393768, 13.041159]
         return [uniform(52.393, 52.394), uniform(13.0409, 13.0413)] # random gps generation for testing
