@@ -8,7 +8,7 @@ if __name__ ==  '__main__':
     print('Read and collect data. [Press Ctrl+C to exit!]')
     sampling_time = 2 # measure every 2 seconds
 
-    simulator = simulation.Simulation(live_gps = False)
+    simulator = simulation.Simulation(live_gps = True)
     sonify = sonification.SonificationLogic(sampling_time)
 
     try:
@@ -16,11 +16,12 @@ if __name__ ==  '__main__':
             time.sleep(sampling_time - 0.6)
 
             position = simulator.get_gps()
+
             pm2_5 = simulator.get_value('PM2.5', position)
             pm10 = simulator.get_value('PM10', position)
             sonify.play_sound(pm2_5, pm10)
 
-            print(position, pm2_5, pm10)
+            print('position, pm2.5, pm10: ', position, pm2_5, pm10)
 
 
     except KeyboardInterrupt:

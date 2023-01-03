@@ -12,6 +12,7 @@ class Simulation:
         pc_path = '../simulation_data/simulation_data.csv'
         raspi_path = '/home/pi/Dokumente/simulated_scripted_exposure_study/simulation_data/simulation_data.csv'
         self.__data_path = raspi_path if live_gps else pc_path
+
         self.__data = self.get_dataframe()
 
     def __del__(self):
@@ -23,7 +24,7 @@ class Simulation:
         value = self.get_value_from_df(feature, index)
         if math.isnan(value):
             # no simulated data for gps position - return last valid value till GPS is "back on track"
-            # TODO send notice when this happens for a longer time period
+            # TODO send notice when this happens for a longer time period or return 'false' value
             return self.get_value_from_df(feature, self.__last_valid_index)
         else:
             self.__last_valid_index = index
@@ -36,6 +37,9 @@ class Simulation:
         return self.__step
 
     def get_index(self, lat, lon):
+        if lat == 'n/a' or lon == 'n/a':
+            # TODO add logic for unvalid gps
+            return self.__last_valid_index
         lat_idx = np.floor(lat / self.get_step()) * self.get_step()
         lon_idx = np.floor(lon / self.get_step()) * self.get_step()
         return [lat_idx, lon_idx]

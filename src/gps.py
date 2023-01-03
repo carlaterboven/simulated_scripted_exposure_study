@@ -1,5 +1,5 @@
 from gps3 import agps3
-#import RPi.GPIO as GPIO
+import RPi.GPIO as GPIO
 import data_logger
 import time
 
@@ -17,12 +17,13 @@ class Gps:
         self.__datalogger = data_logger.DataLogger('/home/pi/Dokumente/simulated_scripted_exposure_study/study_monitoring_data/' + file_name)
 
         GPIO.setmode(GPIO.BCM)
-        self.__RED_LED = 20
+        self.__RED_LED = 27
         GPIO.setup(self.__RED_LED, GPIO.OUT)
         GPIO.output(self.__RED_LED, GPIO.LOW)
-        self.__GREEN_LED = 21
+        self.__GREEN_LED = 17
         GPIO.setup(self.__GREEN_LED, GPIO.OUT)
         GPIO.output(self.__GREEN_LED, GPIO.LOW)
+        self.green_led()
 
     def __del__(self):
         GPIO.output(self.__GREEN_LED, GPIO.LOW)

@@ -11,11 +11,11 @@ class SonificationLogic:
 
     def play_sound(self, pm2_5, pm10):
         p1 = Process(target=self.__oscmessenger.geiger_counter, args=[pm2_5])
-        p2 = Process(target=self.__oscmessenger.string_sound, args=[pm10])
+        #p2 = Process(target=self.__oscmessenger.string_sound, args=[pm10])
         p1.start()
-        p2.start()
+        #p2.start()
         p1.join()
-        p2.join()
+        #p2.join()
 
 class OSCMessenger:
     client = SimpleUDPClient("127.0.0.1", 6666)
@@ -44,7 +44,7 @@ class OSCMessenger:
         num_samples_schrillkurz = 24476
         duration_schrillkurz = 555
         duration = min(duration_schrillkurz * pm10 , self.__sampling_time * 1000)
-        print(duration)
+        print('duration: ', duration)
         # send [sampling time in ms, time for one sample (metronome), start in sample, end in sample, duration]
         OSCMessenger.client.send_message("/beep", [self.__sampling_time * 1000, duration, 0, num_samples_schrillkurz, duration])
 
@@ -56,7 +56,7 @@ class OSCMessenger:
         num_samples_sound6 = 284770
         duration_sound6 = 2966
         duration = duration_sound5 * (2000 / 4552) / pm10
-        print(duration)
+        print('duration string_sound: ', duration)
         OSCMessenger.client.send_message("/string_sound", [self.__sampling_time * 1000, duration, 0, num_samples, duration])
 
 
