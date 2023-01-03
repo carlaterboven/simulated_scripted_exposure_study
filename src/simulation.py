@@ -8,7 +8,7 @@ class Simulation:
         self.__step = 0.0001   # size of grid fields for underlying pm data
         self.__last_valid_index = [52.3894,13.0393]
         self.__gps_sensor = gps.Gps()
-        self.__data_path = '../simulation_data/simulation_data.csv'
+        self.__data_path = '/home/pi/Dokumente/simulated_scripted_exposure_study/simulation_data/simulation_data.csv'
         self.__data = self.get_dataframe()
 
     def __del__(self):
@@ -20,7 +20,7 @@ class Simulation:
         value = self.get_value_from_df(feature, index)
         if math.isnan(value):
             # no simulated data for gps position - return last valid value till GPS is "back on track"
-            # TODO send notice when this happens for a longer time period
+            # TODO send notice when this happens for a longer time period or return 'false' value
             return self.get_value_from_df(feature, self.__last_valid_index)
         else:
             self.__last_valid_index = index
@@ -33,6 +33,9 @@ class Simulation:
         return self.__step
 
     def get_index(self, lat, lon):
+        if lat == 'n/a' or lon == 'n/a':
+            # TODO add logic for unvalid gps
+            return self.__last_valid_index
         lat_idx = np.floor(lat / self.get_step()) * self.get_step()
         lon_idx = np.floor(lon / self.get_step()) * self.get_step()
         return [lat_idx, lon_idx]

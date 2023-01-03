@@ -33,10 +33,9 @@ class Gps:
     # TODO replace this when GPS sensor is available again
     def get_position(self):
         self.compute_position()
-        print([self.get_lat(), self.get_lon()])
-        # return [self.get_lat(), self.get_lon()]
+        return [self.get_lat(), self.get_lon()]
         #return [52.393768, 13.041159]
-        return [uniform(52.393, 52.394), uniform(13.0409, 13.0413)] # random gps generation for testing
+        #return [uniform(52.393, 52.394), uniform(13.0409, 13.0413)] # random gps generation for testing
 
     def show_feedback(self):
         # use green LED to show successfull GPS
