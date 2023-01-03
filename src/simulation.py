@@ -2,20 +2,24 @@ import numpy as np
 import pandas as pd
 import math
 import gps
+import gps_mock
 
 class Simulation:
-    def __init__(self):
+    def __init__(self, live_gps):
         self.__step = 0.0001   # size of grid fields for underlying pm data
         self.__last_valid_index = [52.3894,13.0393]
-        self.__gps_sensor = gps.Gps()
-        self.__data_path = '/home/pi/Dokumente/simulated_scripted_exposure_study/simulation_data/simulation_data.csv'
+        self.__gps_sensor = gps.Gps() if live_gps else gps_mock.GpsMock()
+        pc_path = '../simulation_data/simulation_data.csv'
+        raspi_path = '/home/pi/Dokumente/simulated_scripted_exposure_study/simulation_data/simulation_data.csv'
+        self.__data_path = raspi_path if live_gps else pc_path
+
         self.__data = self.get_dataframe()
 
     def __del__(self):
         pass
 
     def get_value(self, feature, position):
-        #position = self.get_gps()
+        position = self.get_gps()
         index = self.get_index(position[0], position[1])
         value = self.get_value_from_df(feature, index)
         if math.isnan(value):

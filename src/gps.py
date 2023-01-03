@@ -1,6 +1,7 @@
 from gps3 import agps3
 import RPi.GPIO as GPIO
-from random import uniform
+import data_logger
+import time
 
 class Gps:
     def __init__(self):
@@ -10,9 +11,10 @@ class Gps:
         self.__time = 0
         self.__gps_socket = agps3.GPSDSocket()
         self.__data_stream = agps3.DataStream()
-
         self.__gps_socket.connect()
         self.__gps_socket.watch()
+        file_name = 'log' + str(time.time()) + '.csv'
+        self.__datalogger = data_logger.DataLogger('/home/pi/Dokumente/simulated_scripted_exposure_study/study_monitoring_data/' + file_name)
 
         GPIO.setmode(GPIO.BCM)
         self.__RED_LED = 27
@@ -21,7 +23,6 @@ class Gps:
         self.__GREEN_LED = 17
         GPIO.setup(self.__GREEN_LED, GPIO.OUT)
         GPIO.output(self.__GREEN_LED, GPIO.LOW)
-        
         self.green_led()
 
     def __del__(self):
@@ -30,12 +31,14 @@ class Gps:
         GPIO.cleanup()
         pass
 
-    # TODO replace this when GPS sensor is available again
     def get_position(self):
         self.compute_position()
+        self.log_position()
         return [self.get_lat(), self.get_lon()]
-        #return [52.393768, 13.041159]
-        #return [uniform(52.393, 52.394), uniform(13.0409, 13.0413)] # random gps generation for testing
+
+    def log_position(self):
+        data = self.get_data()
+        datalogger.write_data(data)
 
     def show_feedback(self):
         # use green LED to show successfull GPS
