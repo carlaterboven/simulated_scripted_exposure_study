@@ -38,7 +38,7 @@ class Gps:
 
     def log_position(self):
         data = self.get_data()
-        datalogger.write_data(data)
+        self.__datalogger.write_data(data)
 
     def show_feedback(self):
         # use green LED to show successfull GPS
