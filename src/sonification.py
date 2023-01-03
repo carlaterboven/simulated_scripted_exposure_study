@@ -1,4 +1,5 @@
 import time
+import math
 from pythonosc.udp_client import SimpleUDPClient
 from multiprocessing import Process
 
@@ -10,6 +11,12 @@ class SonificationLogic:
         pass
 
     def play_sound(self, pm2_5, pm10):
+        # handle gps outside test area like 0-values -> no sound
+        # when preferring e.g. alarm sounds change these if-statements
+        if math.isnan(pm2_5):
+            pm2_5 = 0
+        if math.isnan(pm10):
+            pm10 = 0
         p1 = Process(target=self.__oscmessenger.geiger_counter, args=[pm2_5])
         #p2 = Process(target=self.__oscmessenger.string_sound, args=[pm10])
         p1.start()

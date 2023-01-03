@@ -19,16 +19,20 @@ class Simulation:
         pass
 
     def get_value(self, feature, position):
-        position = self.get_gps()
         index = self.get_index(position[0], position[1])
         value = self.get_value_from_df(feature, index)
         if math.isnan(value):
-            # no simulated data for gps position - return last valid value till GPS is "back on track"
-            # TODO send notice when this happens for a longer time period or return 'false' value
-            return self.get_value_from_df(feature, self.__last_valid_index)
+            # choose one of the following methods to handle gps data outside test area
+            #return self.get_last_valid_value(feature)
+            return math.nan
         else:
             self.__last_valid_index = index
             return value
+
+    def get_last_valid_value(self, feature):
+        # no simulated data for gps position - return last valid value till GPS is "back on track"
+        # TODO send notice when this happens for a longer time period or return 'false' value
+        return self.get_value_from_df(feature, self.__last_valid_index)
 
     def get_gps(self):
         return self.__gps_sensor.get_position()
@@ -38,8 +42,7 @@ class Simulation:
 
     def get_index(self, lat, lon):
         if lat == 'n/a' or lon == 'n/a':
-            # TODO add logic for unvalid gps
-            return self.__last_valid_index
+            return math.nan
         lat_idx = np.floor(lat / self.get_step()) * self.get_step()
         lon_idx = np.floor(lon / self.get_step()) * self.get_step()
         return [lat_idx, lon_idx]
