@@ -6,7 +6,7 @@ class DataProcesser:
         self.__step = 0.0001
         self.__raspi_data = pd.DataFrame()
         self.__all_data = pd.DataFrame()
-        self.__data_files = raw_data_files
+        self.__data_file_names = raw_data_files
         self.__pm25_model = {'intercept': 236.811578,
                                 'Temperature': -0.8362344519399749,
                                 'Relative_Humidity': -0.2450215855176837,
@@ -41,7 +41,7 @@ class DataProcesser:
         return complete_grid
 
     def import_data(self):
-        for filename in self.__data_files:
+        for filename in self.__data_file_names:
             file = pd.read_csv('../raw_data/' + filename)
             # clear NaN locations (usually due to startup)
             file.dropna(subset=['lat', 'lon', 'alt', 'time'], inplace=True)

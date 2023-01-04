@@ -12,7 +12,6 @@ class Simulation:
         pc_path = '../simulation_data/simulation_data.csv'
         raspi_path = '/home/pi/Dokumente/simulated_scripted_exposure_study/simulation_data/simulation_data.csv'
         self.__data_path = raspi_path if live_gps else pc_path
-
         self.__data = self.get_dataframe()
 
     def __del__(self):
