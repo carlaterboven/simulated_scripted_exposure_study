@@ -25,7 +25,7 @@ class Simulation:
             #return self.get_last_valid_value(feature)
             return math.nan
         else:
-            self.__last_valid_index = index
+            #self.__last_valid_index = index
             return value
 
     def get_last_valid_value(self, feature):
