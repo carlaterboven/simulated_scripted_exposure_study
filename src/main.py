@@ -13,7 +13,7 @@ if __name__ ==  '__main__':
 
     try:
         while True:
-            time.sleep(sampling_time - 0.6)
+            #time.sleep(sampling_time - 0.6)
 
             position = simulator.get_gps()
 
@@ -22,6 +22,8 @@ if __name__ ==  '__main__':
             sonify.play_sound(pm2_5, pm10)
 
             print('position, pm2.5, pm10: ', position, pm2_5, pm10)
+
+            time.sleep(sampling_time - 0.6)
 
 
     except KeyboardInterrupt:

@@ -1,4 +1,4 @@
-#N canvas 392 515 744 300 12;
+#N canvas 160 160 450 276 12;
 #X obj 79 46 inlet;
 #X obj 80 169 outlet~;
 #X obj 79 71 pack f f f;
@@ -8,8 +8,8 @@
 #X obj 363 27 loadbang;
 #X obj 363 104 soundfiler;
 #X floatatom 363 131 8 0 0 0 - - - 0;
-#X obj 79 143 tabread4~ sound5;
-#X msg 363 66 read -resize samples/sound5_f2.wav sound5;
+#X obj 79 142 tabread4~ sound6f;
+#X msg 363 65 read -resize samples/sound6_f.wav sound6f;
 #X connect 0 0 2 0;
 #X connect 2 0 3 0;
 #X connect 3 0 4 0;

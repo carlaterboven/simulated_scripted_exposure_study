@@ -17,12 +17,12 @@ class SonificationLogic:
             pm2_5 = 0
         if math.isnan(pm10):
             pm10 = 0
-        p1 = Process(target=self.__oscmessenger.geiger_counter, args=[pm2_5])
-        #p2 = Process(target=self.__oscmessenger.string_sound, args=[pm10])
-        p1.start()
-        #p2.start()
-        p1.join()
-        #p2.join()
+        #p1 = Process(target=self.__oscmessenger.geiger_counter, args=[pm2_5])
+        p2 = Process(target=self.__oscmessenger.string_sound, args=[pm10])
+        #p1.start()
+        p2.start()
+        #p1.join()
+        p2.join()
 
 class OSCMessenger:
     client = SimpleUDPClient("127.0.0.1", 6666)
@@ -62,10 +62,51 @@ class OSCMessenger:
         duration_sound5 = 4552
         num_samples_sound6 = 284770
         duration_sound6 = 2966
-        duration = duration_sound5 * (2000 / 4552) / pm10
+        #duration = duration_sound5 * (2000 / 4552) / pm10
+        #duration = -50 * pm10 + 2700
+        min_pm10 = 0
+        max_pm10 = 40
+        duration_minpm = 1000
+        duration_maxpm = 700
+        duration = (duration_maxpm - duration_minpm)/(max_pm10 - min_pm10) * pm10 + duration_minpm
         print('duration string_sound: ', duration)
         OSCMessenger.client.send_message("/string_sound", [self.__sampling_time * 1000, duration, 0, num_samples, duration])
 
+    def cello(self, pm10):
+        duration_cello_wav = 3500
+        duration_fadeinout = 500
+        num_samples = 168002
+        #duration_solo = duration_cello_wav - duration_fadeinout
+
+        min_pm10 = 0
+        max_pm10 = 40
+        duration_minpm = 2300
+        duration_maxpm = 700
+        duration_sample = (duration_maxpm - duration_minpm)/(max_pm10 - min_pm10) * pm10 + duration_minpm
+
+        duration_solo = 6/7 * duration_sample
+        metronome_time = 2 * duration_solo
+
+        #duration = min(self.__sampling_time * 1000, duration_cello_wav - duration_fadeinout)
+        OSCMessenger.client.send_message("/cello", [self.__sampling_time * 1000, duration_solo, 0, num_samples, duration_sample, metronome_time])
+
+    def cello2(self, pm10):
+        duration_cello_wav = 1000
+        duration_fadeinout = 500
+        num_samples = 48004
+        #duration_solo = duration_cello_wav - duration_fadeinout
+
+        min_pm10 = 0
+        max_pm10 = 40
+        duration_minpm = 1000
+        duration_maxpm = 200
+        duration_sample = (duration_maxpm - duration_minpm)/(max_pm10 - min_pm10) * pm10 + duration_minpm
+
+        duration_solo = 0.4 * duration_sample
+        metronome_time = 2 * duration_solo
+
+        #duration = min(self.__sampling_time * 1000, duration_cello_wav - duration_fadeinout)
+        OSCMessenger.client.send_message("/cello2", [self.__sampling_time * 1000, duration_solo, 0, num_samples, duration_sample, metronome_time])
 
     def mystic(self, pm10):
         # set the time in seconds while there is sound
