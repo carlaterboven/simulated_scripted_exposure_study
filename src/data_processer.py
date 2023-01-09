@@ -3,7 +3,7 @@ import pandas as pd
 
 class DataProcesser:
     def __init__(self, raw_data_files):
-        self.__step = 0.0001
+        self.__step = 0.00015
         self.__raspi_data = pd.DataFrame()
         self.__all_data = pd.DataFrame()
         self.__data_file_names = raw_data_files
@@ -138,6 +138,7 @@ class DataProcesser:
     def calculate_grid_index(self):
         self.__all_data['latitude_index'] = self.__all_data.apply(lambda row: np.floor(row['lat'] / self.__step) * self.__step, axis=1)
         self.__all_data['longitude_index'] = self.__all_data.apply(lambda row: np.floor(row['lon'] / self.__step) * self.__step, axis=1)
+        self.__all_data[['latitude_index', 'longitude_index']] = self.__all_data[['latitude_index', 'longitude_index']].round(5)
         self.__all_data['grid_index'] = self.__all_data.apply(lambda row: [np.floor(row['lat'] / self.__step) * self.__step, np.floor(row['lon'] / self.__step) * self.__step], axis=1)
         self.__all_data = self.__all_data.astype({'grid_index':'string'})
 
@@ -149,11 +150,11 @@ class DataProcesser:
         median_grid = median_grid.set_index(['latitude_index', 'longitude_index'])
         return median_grid
 
-    def get_median_squares_filtered(self, feature, min_record_filter = 9):
+    def get_median_squares_filtered(self, feature, min_record_filter = 3):
         # make sure that data column does not contain nan values
         df = self.__all_data.dropna(subset=[feature])
         median_grid = df.groupby(pd.Grouper(key='grid_index')).median()
-        # only use fields in grid that have 3 (min_record_filter) or more data records
+        # only use fields in grid that have 9 (min_record_filter) or more data records
         number_datapoints = df.groupby(pd.Grouper(key='grid_index')).size()
         min_record_grid = median_grid.drop(number_datapoints[number_datapoints < min_record_filter].index)
         min_record_grid = min_record_grid[['latitude_index', 'longitude_index', feature]]

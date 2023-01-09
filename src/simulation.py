@@ -6,7 +6,7 @@ import gps_mock
 
 class Simulation:
     def __init__(self, live_gps):
-        self.__step = 0.0001   # size of grid fields for underlying pm data
+        self.__step = 0.00015   # size of grid fields for underlying pm data
         self.__last_valid_index = [52.3894,13.0393]
         self.__gps_sensor = gps.Gps() if live_gps else gps_mock.GpsMock()
         pc_path = '../simulation_data/simulation_data.csv'
@@ -53,6 +53,6 @@ class Simulation:
 
     def get_value_from_df(self, feature, index):
         try:
-            return self.__data.loc[round(index[0], 4), round(index[1], 4)][feature]
+            return self.__data.loc[round(index[0], 5), round(index[1], 5)][feature]
         except:
             return math.nan
