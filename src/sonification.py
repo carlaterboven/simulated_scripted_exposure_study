@@ -42,7 +42,7 @@ class OSCMessenger:
         duration_original_sample = 2966
         num_samples = 284770
         min_pm10 = 0
-        max_pm10 = 40          # TODO find out if this values in correct
+        max_pm10 = 36
         duration_minpm = 2100
         duration_maxpm = 700
         if math.isnan(pm10): # gps outside of test area -> no sound
