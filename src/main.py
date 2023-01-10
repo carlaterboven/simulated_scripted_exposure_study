@@ -8,7 +8,7 @@ if __name__ ==  '__main__':
     print('Read and collect data. [Press Ctrl+C to exit!]')
     sampling_time = 2 # measure every 2 seconds
 
-    simulator = simulation.Simulation(live_gps = False)
+    simulator = simulation.Simulation(live_gps = True)
     sonify = sonification.SonificationLogic(sampling_time)
 
     try:

@@ -1,5 +1,5 @@
 from gps3 import agps3
-#import RPi.GPIO as GPIO
+import RPi.GPIO as GPIO
 import data_logger
 import time
 
