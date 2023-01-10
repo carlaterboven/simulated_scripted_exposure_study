@@ -8,7 +8,8 @@ class GpsMock:
         self.__alt = 0
         self.__time = 0
         self.__logid = 0
-        mock_path = '../study_monitoring_data/log_test_balcony.csv'
+        mock_path = '../study_monitoring_data/log_test_area.csv'
+        #mock_path = '../simulation_data/simulation_data.csv'
         self.__mock_file = pd.read_csv(mock_path)
 
     def __del__(self):
@@ -24,6 +25,8 @@ class GpsMock:
         self.__lat = self.__mock_file.loc[self.__logid, 'lat']
         self.__lon = self.__mock_file.loc[self.__logid, 'lon']
         self.__alt = self.__mock_file.loc[self.__logid, 'alt']
+        #self.__lat = self.__mock_file.loc[self.__logid, 'latitude_index']
+        #self.__lon = self.__mock_file.loc[self.__logid, 'longitude_index']
         self.__logid += 1
 
     def get_lat(self):

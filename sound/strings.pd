@@ -1,4 +1,4 @@
-#N canvas 224 224 784 300 12;
+#N canvas 160 160 700 276 12;
 #X obj 79 46 inlet;
 #X obj 80 169 outlet~;
 #X obj 79 71 pack f f f;
@@ -7,9 +7,9 @@
 #X text 163 96 start \, end duration;
 #X obj 363 27 loadbang;
 #X obj 363 104 soundfiler;
-#X floatatom 363 131 5 0 0 0 - - - 0;
-#X msg 363 65 read -resize samples/schrill_kurz.wav schrill;
-#X obj 79 143 tabread4~ schrill;
+#X floatatom 363 131 8 0 0 0 - - - 0;
+#X msg 363 65 read -resize samples/strings.wav strings;
+#X obj 79 142 tabread4~ strings;
 #X connect 0 0 2 0;
 #X connect 2 0 3 0;
 #X connect 3 0 4 0;

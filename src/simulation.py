@@ -6,13 +6,12 @@ import gps_mock
 
 class Simulation:
     def __init__(self, live_gps):
-        self.__step = 0.0001   # size of grid fields for underlying pm data
+        self.__step = 0.00015   # size of grid fields for underlying pm data
         self.__last_valid_index = [52.3894,13.0393]
         self.__gps_sensor = gps.Gps() if live_gps else gps_mock.GpsMock()
         pc_path = '../simulation_data/simulation_data.csv'
         raspi_path = '/home/pi/Dokumente/simulated_scripted_exposure_study/simulation_data/simulation_data.csv'
         self.__data_path = raspi_path if live_gps else pc_path
-
         self.__data = self.get_dataframe()
 
     def __del__(self):
@@ -26,7 +25,7 @@ class Simulation:
             #return self.get_last_valid_value(feature)
             return math.nan
         else:
-            self.__last_valid_index = index
+            #self.__last_valid_index = index
             return value
 
     def get_last_valid_value(self, feature):
@@ -54,6 +53,6 @@ class Simulation:
 
     def get_value_from_df(self, feature, index):
         try:
-            return self.__data.loc[round(index[0], 4), round(index[1], 4)][feature]
+            return self.__data.loc[round(index[0], 5), round(index[1], 5)][feature]
         except:
             return math.nan
