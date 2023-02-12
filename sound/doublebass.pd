@@ -8,8 +8,8 @@
 #X obj 363 27 loadbang;
 #X obj 363 104 soundfiler;
 #X floatatom 363 131 8 0 0 0 - - - 0;
-#X obj 79 142 tabread4~ strings;
-#X msg 363 65 read -resize samples/strings.wav strings;
+#X obj 79 142 tabread4~ doublebass;
+#X msg 363 65 read -resize samples/doublebass.wav doublebass;
 #X connect 0 0 2 0;
 #X connect 2 0 3 0;
 #X connect 3 0 4 0;
