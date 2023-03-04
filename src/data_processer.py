@@ -34,10 +34,12 @@ class DataProcesser:
         self.import_data()
         self.treat_outliers()
         self.calibrate_data()
+        #self.__all_data.to_csv('../simulation_data/log_nov4_prepared.csv')
         self.calculate_grid_index()
         pm2_5_grid = self.get_median_squares_filtered('PM2.5')
         pm10_grid = self.get_median_squares_filtered('PM10')
         complete_grid = pd.concat([pm2_5_grid, pm10_grid], axis=1)
+        #self.export_grid_csv(complete_grid)
         return complete_grid
 
     def import_data(self):
@@ -154,7 +156,7 @@ class DataProcesser:
         # make sure that data column does not contain nan values
         df = self.__all_data.dropna(subset=[feature])
         median_grid = df.groupby(pd.Grouper(key='grid_index')).median()
-        # only use fields in grid that have 9 (min_record_filter) or more data records
+        # only use fields in grid that have 3 (min_record_filter) or more data records
         number_datapoints = df.groupby(pd.Grouper(key='grid_index')).size()
         min_record_grid = median_grid.drop(number_datapoints[number_datapoints < min_record_filter].index)
         min_record_grid = min_record_grid[['latitude_index', 'longitude_index', feature]]

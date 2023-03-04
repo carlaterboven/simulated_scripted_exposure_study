@@ -8,7 +8,8 @@ class GpsMock:
         self.__alt = 0
         self.__time = 0
         self.__logid = 0
-        mock_path = '../study_monitoring_data/log_test_area.csv'
+        mock_path = '../study_monitoring_data/gps_testrun.csv'
+        #mock_path = '../study_monitoring_data/log_test_area.csv'
         #mock_path = '../simulation_data/simulation_data.csv'
         self.__mock_file = pd.read_csv(mock_path)
 

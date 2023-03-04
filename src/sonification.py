@@ -6,13 +6,14 @@ from multiprocessing import Process
 class SonificationLogic:
     def __init__(self, sampling_time):
         self.__oscmessenger = OSCMessenger(sampling_time)
+        self.__num_clicks = 0
 
     def __del__(self):
         pass
 
     def play_sound(self, pm2_5, pm10):
         p1 = Process(target=self.__oscmessenger.geiger_counter, args=[pm2_5])
-        p2 = Process(target=self.__oscmessenger.string_sound, args=[pm10])
+        p2 = Process(target=self.__oscmessenger.bass_sound, args=[pm10])
         p1.start()
         p2.start()
         p1.join()
@@ -34,11 +35,10 @@ class OSCMessenger:
         pass
 
     def start_sound(self):
-        # TODO add introduction to sonification concepts
+        # add code if you like to play an introduction to your sonification concepts
         pass
 
-    def string_sound(self, pm10):
-        # TODO maybe other sound at 15 (WHO) and 40 (EU)
+    def bass_sound(self, pm10):
         duration_original_sample = 2966
         num_samples = 284770
         min_pm10 = 0
@@ -49,15 +49,14 @@ class OSCMessenger:
             duration = 0
         else:
             duration = (duration_maxpm - duration_minpm)/(max_pm10 - min_pm10) * pm10 + duration_minpm
-        OSCMessenger.client.send_message("/string_sound", [self.__sampling_time * 1000, duration, 0, num_samples, duration])
+        OSCMessenger.client.send_message("/bass_sound", [self.__sampling_time * 1000, duration, 0, num_samples, duration])
 
     def geiger_counter(self, pm2_5):
         if math.isnan(pm2_5):
             pm2_5 = 0
         pm2_5 = round(pm2_5)
-        # click once for every 2µg disjoint PM2.5 pollution
+        # click once for every 2µg PM2.5 pollution
         num_clicks = pm2_5//2
-        if num_clicks == 0:
-            return
-        else:
+
+        if num_clicks != 0:
             OSCMessenger.client.send_message("/geiger", [self.__sampling_time * 1000, (self.__sampling_time * 1000) / num_clicks, 0, 1585, 33])
